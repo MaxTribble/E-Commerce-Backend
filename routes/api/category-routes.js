@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
   try {
-    const categoryData = await Category.findAll({
+    const categoryData = await Category.findByPk(req.params.id,{
       include: [
         {
             model: Product,
@@ -38,10 +38,11 @@ router.get('/:id', async (req, res) => {
             ],
         },]}
     )
-    const Categories = categoryData.map((user) => user.get({ plain : true}))
+    const Categories = categoryData.get({ plain : true})
     res.status(200).json(Categories)
 } catch (err) {
     res.status(500).json({message:'an error occurred, please try again.'})
+    console.log(err)
 }
 });
 
