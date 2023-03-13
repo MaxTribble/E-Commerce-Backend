@@ -46,16 +46,45 @@ router.get('/:id', async (req, res) => {
 }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new category
+  try {
+    const newCategory = await Category.create(
+        req.body,
+    )
+    console.log(newCategory);
+    res.status(200).json(newCategory);
+} catch (err) {
+    console.log(err);
+    res.status(500).json({message:err});
+}
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async(req, res) => {
   // update a category by its `id` value
+  try {
+    const updateCategory = await Category.update(
+        req.body, {
+          where: { id: req.params.id }
+        }
+    )
+    console.log(updateCategory);
+    res.status(200).json(updateCategory);
+} catch (err) {
+    console.log(err);
+    res.status(500).json({message:err});
+}
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
+  try {
+    const categoryData = await Category.destroy({where: {id: req.params.id}})
+    res.status(200).json(categoryData)
+} catch (err) {
+    res.status(500).json({message:'an error occurred, please try again.'})
+    console.log(err)
+}
 });
 
 module.exports = router;
